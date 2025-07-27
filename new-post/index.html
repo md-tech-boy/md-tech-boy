@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MD TECH HACKER - Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    .light-mode {
+      background-color: #ffffff;
+      color: #1a1a1a;
+    }
+    .light-mode .sidebar {
+      background-color: #f8f9fa;
+    }
+    .light-mode .header {
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .light-mode .search-bar {
+      background-color: #ffffff;
+      border: 1px solid #e9ecef;
+      color: #1a1a1a;
+    }
+    .light-mode .nav-menu {
+      background-color: #ffffff;
+      border-bottom: 1px solid #e9ecef;
+    }
+    .light-mode .admin-card {
+      background-color: #f8f9fa;
+    }
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 70px;
+      height: 100vh;
+      background-color: #2a2a2a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding-top: 20px;
+      z-index: 1000;
+    }
+    .sidebar-icon {
+      width: 40px;
+      height: 40px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      color: #888;
+    }
+    .sidebar-icon:hover {
+      background-color: #3a3a3a;
+      color: #fff;
+    }
+    .sidebar-icon a {
+      color: inherit;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+    .main-content {
+      margin-left: 70px;
+      min-height: 100vh;
+    }
+    .header {
+      background-color: #2a2a2a;
+      padding: 15px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid #3a3a3a;
+    }
+    .search-bar {
+      background-color: #1a1a1a;
+      border: 1px solid #3a3a3a;
+      border-radius: 20px;
+      padding: 8px 15px;
+      color: #fff;
+      width: 300px;
+    }
+    .nav-menu {
+      background-color: #1a1a1a;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #3a3a3a;
+    }
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      margin-bottom: 20px;
+    }
+    .nav-link {
+      color: #ccc;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    .nav-link:hover {
+      color: #fff;
+    }
+    .telegram-banner {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 15px 20px;
+      margin: 20px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .join-btn {
+      background-color: #00d4aa;
+      color: #fff;
+      padding: 8px 20px;
+      border-radius: 20px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: background-color 0.3s;
+    }
+    .join-btn:hover {
+      background-color: #00b894;
+    }
+    .content-area {
+      padding: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    .admin-card {
+      background-color: #2a2a2a;
+      border-radius: 10px;
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 500;
+      color: #fff;
+    }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #3a3a3a;
+      border-radius: 6px;
+      background-color: #1a1a1a;
+      color: #fff;
+      font-size: 14px;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #00d4aa;
+    }
+    .form-group textarea {
+      min-height: 120px;
+      resize: vertical;
+    }
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-top: 8px;
+    }
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .checkbox-item input[type="checkbox"] {
+      width: auto;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-size: 16px;
+      margin-right: 10px;
+    }
+    .btn-primary {
+      background-color: #00d4aa;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #00b894;
+    }
+    .btn-secondary {
+      background-color: #6c757d;
+      color: #fff;
+    }
+    .btn-secondary:hover {
+      background-color: #5a6268;
+    }
+    .btn-danger {
+      background-color: #dc3545;
+      color: #fff;
+    }
+    .btn-danger:hover {
+      background-color: #c82333;
+    }
+    .header-icons {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .header-icon {
+      color: #888;
+      font-size: 18px;
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+    .header-icon:hover {
+      color: #fff;
+    }
+    .admin-access-denied {
+      text-align: center;
+      padding: 50px 20px;
+    }
+    .admin-access-denied h2 {
+      color: #dc3545;
+      margin-bottom: 20px;
+    }
+    .posts-list {
+      margin-top: 30px;
+    }
+    .post-item {
+      background-color: #3a3a3a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .post-info h4 {
+      margin: 0 0 5px 0;
+      color: #00d4aa;
+    }
+    .post-info p {
+      margin: 0;
+      color: #888;
+      font-size: 14px;
+    }
+    .post-actions {
+      display: flex;
+      gap: 10px;
+    }
+    .post-actions button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+    .bin-details-section {
+      display: none;
+      background-color: #1a1a1a;
+      padding: 20px;
+      border-radius: 8px;
+      margin-top: 15px;
+    }
+    .bin-details-section.show {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-icon">
+      <a href="/" title="Home"><i class="fas fa-home"></i></a>
+    </div>
+    <div class="sidebar-icon">
+      <a href="/bins/" title="Bins"><i class="fas fa-credit-card"></i></a>
+    </div>
+    <div class="sidebar-icon">
+      <a href="/methods/" title="Methods"><i class="fas fa-star"></i></a>
+    </div>
+    <div class="sidebar-icon">
+      <a href="/accounts/" title="Accounts"><i class="fas fa-user"></i></a>
+    </div>
+    <div class="sidebar-icon">
+      <a href="/support/" title="Support"><i class="fas fa-shield-alt"></i></a>
+    </div>
+    <div class="sidebar-icon">
+      <a href="/new-post/" title="Admin Panel"><i class="fas fa-plus"></i></a>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <!-- Header -->
+    <div class="header">
+      <h1 class="text-xl font-bold">MD TECH HACKER</h1>
+      <input type="text" class="search-bar" placeholder="Search..." />
+      <div class="header-icons">
+        <i class="header-icon fas fa-bookmark" title="Bookmarks"></i>
+        <i class="header-icon fas fa-file-alt" title="Files"></i>
+        <i class="header-icon fas fa-user-circle" title="Profile" onclick="toggleLogin()"></i>
+        <i class="header-icon fas fa-moon" title="Toggle Theme" onclick="toggleTheme()"></i>
+      </div>
+    </div>
+
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <div class="nav-links">
+        <a href="/bins/" class="nav-link">BINS</a>
+        <a href="/methods/" class="nav-link">METHODS</a>
+        <a href="/accounts/" class="nav-link">ACCOUNTS</a>
+        <a href="/support/" class="nav-link">SUPPORT</a>
+        <a href="/new-post/" class="nav-link">ADMIN</a>
+      </div>
+
+      <!-- Telegram Banner -->
+      <div class="telegram-banner">
+        <span>Join Our Channel Of telegram Now</span>
+        <a href="https://t.me/MD_TECH_BOTS" class="join-btn">JOIN NOW!</a>
+      </div>
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Access Denied Message -->
+      <div class="admin-access-denied" id="access-denied">
+        <h2><i class="fas fa-lock"></i> Access Denied</h2>
+        <p>You need admin privileges to access this panel.</p>
+        <p>Please login with an admin account or contact the administrator.</p>
+        <button class="btn btn-primary" onclick="window.location.href='/accounts/'">Go to Login</button>
+      </div>
+
+      <!-- Admin Panel -->
+      <div class="admin-panel" id="admin-panel" style="display: none;">
+        <h2><i class="fas fa-cog"></i> Admin Panel</h2>
+        <p>Create and manage BINs, methods, and other content.</p>
+
+        <!-- Admin Dashboard Stats -->
+        <div class="admin-card">
+          <h3><i class="fas fa-chart-bar"></i> Dashboard Overview</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px;">
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 24px; font-weight: bold;" id="total-posts">0</div>
+              <div style="font-size: 14px; opacity: 0.9;">Total Posts</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%); padding: 20px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 24px; font-weight: bold;" id="total-bins">0</div>
+              <div style="font-size: 14px; opacity: 0.9;">BINs Created</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%); padding: 20px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 24px; font-weight: bold;" id="total-methods">0</div>
+              <div style="font-size: 14px; opacity: 0.9;">Methods Added</div>
+            </div>
+            <div style="background: linear-gradient(135deg, #ffc107 0%, #ff9800 100%); padding: 20px; border-radius: 10px; text-align: center;">
+              <div style="font-size: 24px; font-weight: bold;" id="draft-posts">0</div>
+              <div style="font-size: 14px; opacity: 0.9;">Draft Posts</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="admin-card">
+          <h3><i class="fas fa-bolt"></i> Quick Actions</h3>
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px; margin-top: 20px;">
+            <button class="btn btn-primary" onclick="showCreateForm('bin')" style="padding: 15px; display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-credit-card"></i>
+              <div>
+                <div style="font-weight: bold;">Add New BIN</div>
+                <div style="font-size: 12px; opacity: 0.8;">Create credit card BIN</div>
+              </div>
+            </button>
+            <button class="btn btn-primary" onclick="showCreateForm('method')" style="padding: 15px; display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-star"></i>
+              <div>
+                <div style="font-weight: bold;">Add New Method</div>
+                <div style="font-size: 12px; opacity: 0.8;">Create tutorial method</div>
+              </div>
+            </button>
+            <button class="btn btn-primary" onclick="showCreateForm('account')" style="padding: 15px; display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-user"></i>
+              <div>
+                <div style="font-weight: bold;">Add Account</div>
+                <div style="font-size: 12px; opacity: 0.8;">Create premium account</div>
+              </div>
+            </button>
+            <button class="btn btn-primary" onclick="showCreateForm('general')" style="padding: 15px; display: flex; align-items: center; gap: 10px;">
+              <i class="fas fa-plus"></i>
+              <div>
+                <div style="font-weight: bold;">General Post</div>
+                <div style="font-size: 12px; opacity: 0.8;">Create any content</div>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Create Post Form -->
+        <div class="admin-card" id="create-form-card" style="display: none;">
+          <h3><i class="fas fa-plus-circle"></i> Create New Content</h3>
+          <form id="new-post-form">
+            <div class="form-group">
+              <label for="post-title">Title *</label>
+              <input type="text" id="post-title" required placeholder="Enter an attractive title" />
+            </div>
+
+            <div class="form-group">
+              <label for="post-description">Short Description</label>
+              <input type="text" id="post-description" placeholder="Brief description for preview" />
+            </div>
+
+            <div class="form-group">
+              <label for="post-content">Content *</label>
+              <textarea id="post-content" required placeholder="Enter detailed content, instructions, or information" style="min-height: 150px;"></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+              <div class="form-group">
+                <label for="post-type">Content Type *</label>
+                <select id="post-type" required onchange="toggleSpecificDetails()">
+                  <option value="">Select content type</option>
+                  <option value="bin">💳 BIN (Credit Card)</option>
+                  <option value="method">⭐ Method/Tutorial</option>
+                  <option value="account">👤 Premium Account</option>
+                  <option value="tool">🔧 Tool/Software</option>
+                  <option value="general">📝 General Post</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="post-status">Status</label>
+                <select id="post-status">
+                  <option value="published">✅ Published</option>
+                  <option value="draft">📝 Draft</option>
+                  <option value="private">🔒 Private</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Categories & Tags</label>
+              <div class="checkbox-group">
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cat-premium" value="Premium" />
+                  <label for="cat-premium">🔥 Premium</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cat-free" value="Free" />
+                  <label for="cat-free">🆓 Free</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cat-verified" value="Verified" />
+                  <label for="cat-verified">✅ Verified</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cat-tutorial" value="Tutorial" />
+                  <label for="cat-tutorial">📚 Tutorial</label>
+                </div>
+                <div class="checkbox-item">
+                  <input type="checkbox" id="cat-working" value="Working" />
+                  <label for="cat-working">⚡ Working</label>
+                </div>
+              </div>
+            </div>
+
+            <!-- BIN Details Section -->
+            <div class="bin-details-section" id="bin-details-section">
+              <h4><i class="fas fa-credit-card"></i> BIN Details</h4>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label for="bin-number">BIN Number *</label>
+                  <input type="text" id="bin-number" placeholder="e.g., 4532 15xx xxxx xxxx" />
+                </div>
+                <div class="form-group">
+                  <label for="bin-type">Card Type</label>
+                  <select id="bin-type">
+                    <option value="">Select card type</option>
+                    <option value="visa">💳 Visa</option>
+                    <option value="mastercard">💳 Mastercard</option>
+                    <option value="amex">💳 American Express</option>
+                    <option value="discover">💳 Discover</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="bin-bank">Bank Name</label>
+                  <input type="text" id="bin-bank" placeholder="e.g., Chase Bank" />
+                </div>
+                <div class="form-group">
+                  <label for="bin-country">Country</label>
+                  <input type="text" id="bin-country" placeholder="e.g., United States" />
+                </div>
+                <div class="form-group">
+                  <label for="success-rate">Success Rate (%)</label>
+                  <input type="number" id="success-rate" min="0" max="100" placeholder="85" />
+                </div>
+                <div class="form-group">
+                  <label for="bin-level">BIN Level</label>
+                  <select id="bin-level">
+                    <option value="standard">Standard</option>
+                    <option value="gold">Gold</option>
+                    <option value="platinum">Platinum</option>
+                    <option value="black">Black</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Method Details Section -->
+            <div class="bin-details-section" id="method-details-section">
+              <h4><i class="fas fa-star"></i> Method Details</h4>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label for="method-service">Service/Platform</label>
+                  <input type="text" id="method-service" placeholder="e.g., Netflix, Spotify, ChatGPT" />
+                </div>
+                <div class="form-group">
+                  <label for="method-duration">Duration</label>
+                  <input type="text" id="method-duration" placeholder="e.g., 1 Month, 3 Months, Lifetime" />
+                </div>
+                <div class="form-group">
+                  <label for="method-difficulty">Difficulty Level</label>
+                  <select id="method-difficulty">
+                    <option value="easy">🟢 Easy</option>
+                    <option value="medium">🟡 Medium</option>
+                    <option value="hard">🔴 Hard</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label for="method-success-rate">Success Rate (%)</label>
+                  <input type="number" id="method-success-rate" min="0" max="100" placeholder="90" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Account Details Section -->
+            <div class="bin-details-section" id="account-details-section">
+              <h4><i class="fas fa-user"></i> Account Details</h4>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div class="form-group">
+                  <label for="account-service">Service</label>
+                  <input type="text" id="account-service" placeholder="e.g., Netflix Premium, Spotify Family" />
+                </div>
+                <div class="form-group">
+                  <label for="account-username">Username/Email</label>
+                  <input type="text" id="account-username" placeholder="Account username or email" />
+                </div>
+                <div class="form-group">
+                  <label for="account-password">Password</label>
+                  <input type="text" id="account-password" placeholder="Account password" />
+                </div>
+                <div class="form-group">
+                  <label for="account-validity">Validity</label>
+                  <input type="text" id="account-validity" placeholder="e.g., 30 days, 6 months" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="publish-date">Publish Date & Time</label>
+              <input type="datetime-local" id="publish-date" />
+            </div>
+
+            <div class="form-group" style="display: flex; gap: 10px; justify-content: flex-end;">
+              <button type="button" class="btn btn-secondary" onclick="hideCreateForm()">
+                <i class="fas fa-times"></i> Cancel
+              </button>
+              <button type="button" class="btn btn-secondary" onclick="resetForm()">
+                <i class="fas fa-undo"></i> Reset
+              </button>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-save"></i> Create Content
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Existing Posts -->
+        <div class="admin-card">
+          <h3>Manage Posts</h3>
+          <div class="posts-list" id="posts-list">
+            <!-- Posts will be loaded here -->
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/main.js"></script>
+  <script>
+    let currentUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+    let posts = JSON.parse(localStorage.getItem('posts') || '[]');
+
+    function checkAdminAccess() {
+      if (!currentUser) {
+        document.getElementById('access-denied').style.display = 'block';
+        document.getElementById('admin-panel').style.display = 'none';
+        return false;
+      }
+
+      // Check if user is admin with specific credentials
+      const isAdmin = currentUser.email === 'keygenmd5@gmail.com' || 
+                     currentUser.email === 'm.dharaaneesh123@gmail.com' ||
+                     currentUser.username === 'MD_TECH_HACKER' ||
+                     currentUser.username === 'admin';
+
+      if (isAdmin) {
+        document.getElementById('access-denied').style.display = 'none';
+        document.getElementById('admin-panel').style.display = 'block';
+        loadPosts();
+        return true;
+      } else {
+        document.getElementById('access-denied').style.display = 'block';
+        document.getElementById('admin-panel').style.display = 'none';
+        return false;
+      }
+    }
+
+    function updateDashboardStats() {
+      const totalPosts = posts.length;
+      const totalBins = posts.filter(p => p.type === 'bin').length;
+      const totalMethods = posts.filter(p => p.type === 'method').length;
+      const draftPosts = posts.filter(p => p.status === 'draft').length;
+
+      document.getElementById('total-posts').textContent = totalPosts;
+      document.getElementById('total-bins').textContent = totalBins;
+      document.getElementById('total-methods').textContent = totalMethods;
+      document.getElementById('draft-posts').textContent = draftPosts;
+    }
+
+    function showCreateForm(type = '') {
+      document.getElementById('create-form-card').style.display = 'block';
+      if (type) {
+        document.getElementById('post-type').value = type;
+        toggleSpecificDetails();
+      }
+      document.getElementById('create-form-card').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function hideCreateForm() {
+      document.getElementById('create-form-card').style.display = 'none';
+      resetForm();
+    }
+
+    function toggleSpecificDetails() {
+      const postType = document.getElementById('post-type').value;
+      
+      // Hide all detail sections
+      document.getElementById('bin-details-section').classList.remove('show');
+      document.getElementById('method-details-section').classList.remove('show');
+      document.getElementById('account-details-section').classList.remove('show');
+      
+      // Show relevant section
+      if (postType === 'bin') {
+        document.getElementById('bin-details-section').classList.add('show');
+      } else if (postType === 'method') {
+        document.getElementById('method-details-section').classList.add('show');
+      } else if (postType === 'account') {
+        document.getElementById('account-details-section').classList.add('show');
+      }
+    }
+
+    function resetForm() {
+      document.getElementById('new-post-form').reset();
+      document.querySelectorAll('.bin-details-section').forEach(section => {
+        section.classList.remove('show');
+      });
+      document.getElementById('publish-date').value = new Date().toISOString().slice(0, 16);
+    }
+
+    // Form submission
+    document.getElementById('new-post-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const title = document.getElementById('post-title').value;
+      const description = document.getElementById('post-description').value;
+      const content = document.getElementById('post-content').value;
+      const postType = document.getElementById('post-type').value;
+      const status = document.getElementById('post-status').value;
+      const publishDate = document.getElementById('publish-date').value || new Date().toISOString();
+
+      // Get selected categories
+      const categories = [];
+      document.querySelectorAll('input[type="checkbox"]:checked').forEach(cb => {
+        categories.push(cb.value);
+      });
+
+      // Create post object
+      const newPost = {
+        id: Date.now(),
+        title: title,
+        description: description,
+        content: content,
+        type: postType,
+        status: status,
+        publishDate: publishDate,
+        categories: categories,
+        author: currentUser.username,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString()
+      };
+
+      // Add specific details based on post type
+      if (postType === 'bin') {
+        newPost.binDetails = {
+          binNumber: document.getElementById('bin-number').value,
+          cardType: document.getElementById('bin-type').value,
+          bank: document.getElementById('bin-bank').value,
+          country: document.getElementById('bin-country').value,
+          successRate: document.getElementById('success-rate').value,
+          level: document.getElementById('bin-level').value
+        };
+      } else if (postType === 'method') {
+        newPost.methodDetails = {
+          service: document.getElementById('method-service').value,
+          duration: document.getElementById('method-duration').value,
+          difficulty: document.getElementById('method-difficulty').value,
+          successRate: document.getElementById('method-success-rate').value
+        };
+      } else if (postType === 'account') {
+        newPost.accountDetails = {
+          service: document.getElementById('account-service').value,
+          username: document.getElementById('account-username').value,
+          password: document.getElementById('account-password').value,
+          validity: document.getElementById('account-validity').value
+        };
+      }
+
+      // Save post
+      posts.push(newPost);
+      localStorage.setItem('posts', JSON.stringify(posts));
+
+      // Show success message
+      if (window.MDTech && window.MDTech.showNotification) {
+        window.MDTech.showNotification(`${postType.toUpperCase()} created successfully!`, 'success');
+      } else {
+        alert(`${postType.toUpperCase()} created successfully!`);
+      }
+
+      // Reset form, hide form, reload posts and update stats
+      resetForm();
+      hideCreateForm();
+      loadPosts();
+      updateDashboardStats();
+    });
+
+    function loadPosts() {
+      const postsList = document.getElementById('posts-list');
+      
+      if (posts.length === 0) {
+        postsList.innerHTML = '<p style="text-align: center; color: #888; padding: 20px;">No content created yet. Use the Quick Actions above to get started!</p>';
+        return;
+      }
+
+      postsList.innerHTML = posts.map(post => {
+        const typeIcon = {
+          'bin': '💳',
+          'method': '⭐',
+          'account': '👤',
+          'tool': '🔧',
+          'general': '📝'
+        }[post.type] || '📝';
+
+        const statusBadge = {
+          'published': '<span style="background: #28a745; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">✅ Published</span>',
+          'draft': '<span style="background: #ffc107; color: black; padding: 2px 8px; border-radius: 12px; font-size: 11px;">📝 Draft</span>',
+          'private': '<span style="background: #6c757d; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px;">🔒 Private</span>'
+        }[post.status] || '';
+
+        return `
+          <div class="post-item">
+            <div class="post-info">
+              <h4>${typeIcon} ${post.title}</h4>
+              <p style="margin: 5px 0; color: #ccc; font-size: 13px;">${post.description || 'No description'}</p>
+              <p style="margin: 0; font-size: 12px;">
+                ${statusBadge} • 
+                <span style="color: #888;">Created ${new Date(post.createdAt).toLocaleDateString()}</span>
+                ${post.categories.length > 0 ? ' • ' + post.categories.map(cat => `<span style="background: #007bff; color: white; padding: 1px 6px; border-radius: 8px; font-size: 10px;">${cat}</span>`).join(' ') : ''}
+              </p>
+            </div>
+            <div class="post-actions">
+              <button class="btn btn-secondary" onclick="editPost(${post.id})" title="Edit">
+                <i class="fas fa-edit"></i>
+              </button>
+              <button class="btn btn-primary" onclick="viewPost(${post.id})" title="View Details" style="background: #007bff;">
+                <i class="fas fa-eye"></i>
+              </button>
+              <button class="btn btn-danger" onclick="deletePost(${post.id})" title="Delete">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function viewPost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (!post) return;
+
+      let detailsHtml = `
+        <h3>${post.title}</h3>
+        <p><strong>Type:</strong> ${post.type.toUpperCase()}</p>
+        <p><strong>Status:</strong> ${post.status}</p>
+        <p><strong>Description:</strong> ${post.description || 'No description'}</p>
+        <p><strong>Content:</strong></p>
+        <div style="background: #1a1a1a; padding: 15px; border-radius: 8px; margin: 10px 0;">${post.content}</div>
+        <p><strong>Categories:</strong> ${post.categories.join(', ') || 'None'}</p>
+        <p><strong>Created:</strong> ${new Date(post.createdAt).toLocaleString()}</p>
+      `;
+
+      if (post.binDetails) {
+        detailsHtml += `
+          <h4>BIN Details:</h4>
+          <p><strong>BIN Number:</strong> ${post.binDetails.binNumber}</p>
+          <p><strong>Card Type:</strong> ${post.binDetails.cardType}</p>
+          <p><strong>Bank:</strong> ${post.binDetails.bank}</p>
+          <p><strong>Country:</strong> ${post.binDetails.country}</p>
+          <p><strong>Success Rate:</strong> ${post.binDetails.successRate}%</p>
+          <p><strong>Level:</strong> ${post.binDetails.level}</p>
+        `;
+      }
+
+      if (post.methodDetails) {
+        detailsHtml += `
+          <h4>Method Details:</h4>
+          <p><strong>Service:</strong> ${post.methodDetails.service}</p>
+          <p><strong>Duration:</strong> ${post.methodDetails.duration}</p>
+          <p><strong>Difficulty:</strong> ${post.methodDetails.difficulty}</p>
+          <p><strong>Success Rate:</strong> ${post.methodDetails.successRate}%</p>
+        `;
+      }
+
+      if (post.accountDetails) {
+        detailsHtml += `
+          <h4>Account Details:</h4>
+          <p><strong>Service:</strong> ${post.accountDetails.service}</p>
+          <p><strong>Username:</strong> ${post.accountDetails.username}</p>
+          <p><strong>Password:</strong> ${post.accountDetails.password}</p>
+          <p><strong>Validity:</strong> ${post.accountDetails.validity}</p>
+        `;
+      }
+
+      // Create modal
+      const modal = document.createElement('div');
+      modal.style.cssText = `
+        position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+        background: rgba(0,0,0,0.8); display: flex; justify-content: center; align-items: center;
+        z-index: 2000; padding: 20px;
+      `;
+
+      const content = document.createElement('div');
+      content.style.cssText = `
+        background: #2a2a2a; border-radius: 10px; padding: 30px;
+        max-width: 600px; max-height: 80vh; overflow-y: auto; color: #fff;
+      `;
+
+      content.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2>Post Details</h2>
+          <button onclick="this.closest('div').remove()" style="background: none; border: none; color: #fff; font-size: 24px; cursor: pointer;">&times;</button>
+        </div>
+        ${detailsHtml}
+      `;
+
+      modal.appendChild(content);
+      document.body.appendChild(modal);
+
+      modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.remove();
+      });
+    }
+
+    function editPost(postId) {
+      const post = posts.find(p => p.id === postId);
+      if (!post) return;
+
+      // Fill form with post data
+      document.getElementById('post-title').value = post.title;
+      document.getElementById('post-content').value = post.content;
+      document.getElementById('post-type').value = post.type;
+      document.getElementById('post-status').value = post.status;
+      document.getElementById('publish-date').value = post.publishDate.slice(0, 16);
+
+      // Set categories
+      document.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+        cb.checked = post.categories.includes(cb.value);
+      });
+
+      // Fill BIN details if applicable
+      if (post.type === 'bin' && post.binDetails) {
+        document.getElementById('bin-number').value = post.binDetails.binNumber || '';
+        document.getElementById('bin-type').value = post.binDetails.cardType || '';
+        document.getElementById('bin-bank').value = post.binDetails.bank || '';
+        document.getElementById('bin-country').value = post.binDetails.country || '';
+        document.getElementById('success-rate').value = post.binDetails.successRate || '';
+        toggleBinDetails();
+      }
+
+      // Remove the post from array (will be re-added when form is submitted)
+      posts = posts.filter(p => p.id !== postId);
+      localStorage.setItem('posts', JSON.stringify(posts));
+
+      if (window.MDTech && window.MDTech.showNotification) {
+        window.MDTech.showNotification('Post loaded for editing', 'info');
+      }
+    }
+
+    function deletePost(postId) {
+      if (confirm('Are you sure you want to delete this post?')) {
+        posts = posts.filter(p => p.id !== postId);
+        localStorage.setItem('posts', JSON.stringify(posts));
+        loadPosts();
+        
+        if (window.MDTech && window.MDTech.showNotification) {
+          window.MDTech.showNotification('Post deleted successfully', 'success');
+        }
+      }
+    }
+
+    // Initialize page
+    document.addEventListener('DOMContentLoaded', function() {
+      // Set default publish date
+      document.getElementById('publish-date').value = new Date().toISOString().slice(0, 16);
+      
+      // Check admin access
+      if (checkAdminAccess()) {
+        updateDashboardStats();
+      }
+      
+      // Listen for user login changes
+      setInterval(() => {
+        const newUser = JSON.parse(localStorage.getItem('currentUser') || 'null');
+        if (newUser !== currentUser) {
+          currentUser = newUser;
+          if (checkAdminAccess()) {
+            updateDashboardStats();
+          }
+        }
+      }, 1000);
+    });
+  </script>
+</body>
+</html>
